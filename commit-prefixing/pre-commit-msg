@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eu
+
+# Get the current branch name
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+# Regex to match the pattern: 3 letters, a dash, 4 digits, a dash (e.g., ABC-1234-)
+regex="^[A-Za-z]{3}-[0-9]{4}-*"
+
+# Path to the temporary commit message file
+commit_msg_file=$(git rev-parse --git-dir)/COMMIT_EDITMSG
+
+# Read the current commit message
+commit_message=$(cat "$commit_msg_file")
+
+# Check if the branch name matches the required pattern
+if [[ "$branch_name" =~ $regex ]]; then
+  echo "Branch name matches the required pattern (3 letters-4 digits-)."
+    # Extract the prefix from the branch name (e.g., SRE-3564)
+    prefix=$(echo "$branch_name" | grep -oE "$regex" | sed 's/-$//')
+
+    # Check if the commit message already starts with the prefix
+    if [[ "$commit_message" != "[$prefix]"* ]]; then
+        # Add the prefix to the commit message
+        echo "[$prefix] $commit_message" > "$commit_msg_file"
+    fi
+else
+    # Branch name does not match the pattern; do nothing
+    echo "Branch name does not match the required pattern (3 letters-4 digits-). Skipping prefixing."
+fi
