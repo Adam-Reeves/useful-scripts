@@ -6,7 +6,7 @@ This repository contains a template directory for global Git hooks. Follow these
 1.	Clone this repository to a location on your system, such as `~/.git-templates`:
 
 ```bash
-git clone <repository-url> ~/.git-templates
+git clone https://github.com/Adam-Reeves/useful-scripts.git ~/.git-templates
 ```
 
 2. Set the template directory globally in your Git configuration:
